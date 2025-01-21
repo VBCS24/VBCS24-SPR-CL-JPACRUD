@@ -5,6 +5,7 @@ import Lab.Repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,14 +21,14 @@ public class StoreService {
      * @return the persisted store
      */
     public Store persistStore(Store store){
-        return null;
+        return storeRepository.save(store);
     }
     /**
      * TODO: get all store entities
      * @return all store entities
      */
     public List<Store> getAllStores(){
-        return null;
+        return storeRepository.findAll();
     }
     /**
      * TODO: given an id of a store, return the store.
@@ -36,21 +37,35 @@ public class StoreService {
      * @return a store entity
      */
     public Store getStoreById(long id){
-        return null;
+        Optional<Store> optionalStore = storeRepository.findById(id);
+        if (optionalStore.isPresent()) {
+            return optionalStore.get();
+        }
+        else {
+            return null;
+        }
     }
     /**
      * TODO: given an id of an existing store, delete the store
      */
-    public void deleteStore(long id){
-//        code here
+    public void deleteStore(long id) {
+        storeRepository.deleteById(id);
     }
     /**
-     * TODO: given an id and some replacement data for a store, overwrite the data of an existing store,
+     * TODO: given an id and some replacement data for a store, 
+     * overwrite the data of an existing store,
      * and return the updated store.
      * @return the updated store entity
      */
     public Store updateStore(long id, Store replacement){
-        return null;
+        Optional<Store> optionalStore = storeRepository.findById(id);
+        Store store = null;
+        if (optionalStore.isPresent()) {
+            store = optionalStore.get();
+            store.setName(replacement.getName());
+            storeRepository.save(store);
+        }
+        return store;
     }
 
 }
